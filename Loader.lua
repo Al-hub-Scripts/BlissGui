@@ -83,6 +83,13 @@ function Lib:CreateWindow(opts)
     if not opts.Theme then opts.Theme = self._theme end
     local winAPI = Window.new(Core, opts)
 
+    local showHome = opts.HomePage
+    if showHome == nil then showHome = true end
+    if showHome then
+        local homeTab = winAPI:AddTab({ Name = "Home", Icon = "⌂" })
+        Widgets:Setup(homeTab, winAPI)
+    end
+
     local _origAddTab = winAPI.AddTab
     function winAPI:AddTab(tabOpts)
         local tabAPI = _origAddTab(self, tabOpts)
@@ -93,13 +100,6 @@ function Lib:CreateWindow(opts)
             return secAPI
         end
         return tabAPI
-    end
-
-    local showHome = opts.HomePage
-    if showHome == nil then showHome = true end
-    if showHome then
-        local homeTab = winAPI:AddTab({ Name = "Home", Icon = "⌂" })
-        Widgets:Setup(homeTab, winAPI)
     end
 
     table.insert(self._windows, winAPI)
